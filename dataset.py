@@ -24,11 +24,15 @@ image_datasets = {
     'test': datasets.ImageFolder(os.path.join(path, 'test'), data_transforms['test'])
 }
 
-if __name__ == '__main__':
+def get_dataloaders():
     dataloaders = {
         'train': DataLoader(image_datasets['train'], batch_size=32, shuffle=True, num_workers=4),
         'test': DataLoader(image_datasets['test'], batch_size=32, shuffle=False, num_workers=4)
     }
+    return dataloaders
+
+if __name__ == '__main__':
+    dataloaders = get_dataloaders()
 
     # Get dataset sizes and class names
     dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'test']}
