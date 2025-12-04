@@ -22,7 +22,7 @@ def imshow(img, title=None):
 
 
 # This function is the train function from HW5 of ECE4554
-def train(model, loader, criterion, optimizer,device, epochs=5):
+def train(model, loader, criterion, optimizer,device, epochs=3):
   '''Train a model from training data.
 
   Args:

@@ -6,7 +6,7 @@ from torch import nn
 from torch import optim
 
 if __name__ == '__main__':
-    model = model.CNN(2)
+    model = model.SimpleCNN()
     transform = d.get_dataTransforms()
     dataset = d.get_data('dataset', transform)
     trainloader, testloader = d.get_dataloaders(dataset)
@@ -21,3 +21,6 @@ if __name__ == '__main__':
 
     utils.train(model, trainloader, criterion, optimizer, device)
     utils.evaluate(model, testloader, device)
+
+    CNN_MODEL_PATH = './cnn_model.pth'
+    torch.save(model.state_dict(), CNN_MODEL_PATH)
