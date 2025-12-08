@@ -46,7 +46,8 @@ abstract and then teaser figure (2 sentences)
 <br><br>
 <!-- Introduction -->
 <h3>Introduction</h3>
-Introduction
+The recent creation of highly realistic, AI-generated synthetic media presents a new challenge in distinguishing between AI and real images. These AI-generated images have a high potential for malicious use, like disinformation campaigns and fraud. This makes it critical to be able to automatically detect AI-generated images. This project aims to address this issue using a deep learning solution to classify images as real or fake. A convolutional neural network (CNN) will be used to do this because of its success with image analysis and feature extraction. The CNN utilizes a series of convolutional layers to extract spatial features and learn the underlying statistical differences and distinguish between real and AI-generated images.
+
 
 <!-- Approach -->
 <h3>Approach</h3>
@@ -70,7 +71,7 @@ also include qualitative results
 
 <!--Conclusion-->
 <h3>Conclusion</h3>
-conclusion
+This report has described the need for differentiating between real and AI-generated images, and proposed a solution using deep learning techniques. The threat of malicious AI-generated images is real, and we proposed a way to help mitigate that. Our proposed solution gave both a simple CNN, similar to what was worked on in class, and a ResNet18 variant model. With very high levels of accuracy, balanced precision and recall scores, and a high F1-Score, it is clear that both of the approaches are good at not only classifying real and fake images, but also are not biased towards false positives or false negatives. This is really important when dealing with automatic detection where you don’t want to mark real images as AI-generated, while also not marking AI-generated images as real. While the results were very good, there are some potential improvements to the project and the approach. The current dataset is based on CIFAR-10, which does not have the best quality of images, despite scaling them up to 224x224. This means that the models may struggle with high quality AI-generated images that are more prevalent with recent advances in AI. This problem could be addressed with a new dataset with these newer AI-generated images, but as AI continues to improve and evolve, the methods to detect and prevent malicious use of it must do the same.
 <br><br>
 
 <h3>References</h3>

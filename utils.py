@@ -2,7 +2,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import torch
 from tqdm import tqdm  # For progress bar
-
+"""
+utils.py: Provides training, testing, and image display functionality to be called elsewhere
+Authors: Will Fete & Jason Albanus
+Date: 12/7/2025
+Notice: train and evaluate functions are from HW5 of ECE4554 with slight modifications
+"""
 
 def imshow(img, title=None):
     """Used to display image"""
@@ -77,6 +82,13 @@ def evaluate(model, loader, device):
     - model: Neural network to evaluate
     - loader: Dataloader containing test dataset
     - device: PyTorch device (CPU vs GPU)
+
+  Prints:
+    Accuracy
+    Precision
+    Recall
+    F1-Score
+    TP, FP, TN, FN Counts
   '''
   model.eval()
   # Evaluate accuracy on validation / test set
@@ -112,7 +124,6 @@ def evaluate(model, loader, device):
   f1_score = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
 
   print(f"\nAccuracy of the network on the {total} test images: {correct / total:.8f}")
-  print(f"\nAccuracy of the network on the {total} test images: {100 * correct / total:.8f} %")
   print(f'\nPrecision of the network on the {total} test images: {precision}')
   print(f'\nRecall of the network on the {total} test images: {recall}')
   print(f'\nF1 Score of the network on the {total} test images: {f1_score}')

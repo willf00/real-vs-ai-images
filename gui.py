@@ -4,27 +4,33 @@ from PIL import Image, ImageTk
 import torch
 import os
 from torchvision import transforms
-import model  # Make sure your model.py file is in the same folder
+import model
+"""
+gui.py: Provides an interactive GUI for a user to input an image to get classified
+Authors: Will Fete & Jason Albanus
+Date: 12/7/2025
+Notice: To use this, you must have a model saved to ./cnn_model.pth
+"""
 
 # --- CONFIGURATION ---
 CNN_MODEL_PATH = './cnn_model.pth'
-CLASS_NAMES = ['Fake', 'Real']  # Update this order based on your dataset.py classes!
+CLASS_NAMES = ['Fake', 'Real']
 
-# 1. Load Model ONCE (Global) to make the app faster
+# Load Model globally
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Loading model on {device}...")
 
 # Initialize architecture
-cnn = model.SimpleCNN().to(device)
+cnn = model.CNN(2).to(device) # Use resnet model for now
 
 # Load weights
 # map_location ensures it works even if you switch between GPU/CPU machines
 cnn.load_state_dict(torch.load(CNN_MODEL_PATH, map_location=device))
 
-# 2. Set to Evaluation Mode (Crucial!)
+# Set to eval mode to avoid training and dropout
 cnn.eval()
 
-# 3. Define the Transform (Must match your Training Transform!)
+# Define the Transform (Same transform done to dataset)
 inference_transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
@@ -33,7 +39,14 @@ inference_transform = transforms.Compose([
 
 
 def select_file():
-    filetypes = (('jpg files', '*.jpg'),)
+    """
+       Args:
+       None
+
+       Purpose: Executes when the button has been pressed. Opens up the file explorer for user to choose an input image.
+                Calls the selected model in inference mode to get a prediction and confidence rating.
+    """
+    filetypes = (('jpg files', '*.jpg'),) # Only accepts jpg
     filename = filedialog.askopenfilename(title='Open a file', initialdir=os.getcwd(), filetypes=filetypes)
 
     if filename:
