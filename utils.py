@@ -78,6 +78,7 @@ def evaluate(model, loader, device):
     - loader: Dataloader containing test dataset
     - device: PyTorch device (CPU vs GPU)
   '''
+  model.eval()
   # Evaluate accuracy on validation / test set
   correct = 0
   total = 0
