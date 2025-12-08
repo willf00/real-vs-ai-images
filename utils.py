@@ -22,7 +22,7 @@ def imshow(img, title=None):
 
 
 # This function is the train function from HW5 of ECE4554
-def train(model, loader, criterion, optimizer,device, epochs=3):
+def train(model, loader, criterion, optimizer,device, epochs=5):
   '''Train a model from training data.
 
   Args:
@@ -62,7 +62,7 @@ def train(model, loader, criterion, optimizer,device, epochs=3):
               tqdm.write(f'[epoch {epoch + 1}, batch {i + 1:5d}] loss: {running_loss / 500:.3f}')
               running_loss = 0.0
 
-              print(f'\nAccuracy of the network on last {500} training images: {100 * correct // total} %')
+              print(f'\nAccuracy of the network on last {500} training images: {100 * correct // total:.8f} %')
               total = 0
               correct = 0
 
@@ -82,16 +82,38 @@ def evaluate(model, loader, device):
   # Evaluate accuracy on validation / test set
   correct = 0
   total = 0
+  TP = TN = FP = FN = 0
   # since we're not training, we don't need to calculate the gradients for our outputs
   with torch.no_grad():
-      for data in tqdm(loader):
-          images, labels = data
-          images, labels = images.to(device), labels.to(device) # from piazza was broken
-          # calculate outputs by running images through the network
-          outputs = model(images)
-          # the class with the highest energy is what we choose as prediction
-          _, predicted = torch.max(outputs.data, 1)
-          total += labels.size(0)
-          correct += (predicted == labels).sum().item()
+    for data in tqdm(loader):
+      images, labels = data
+      images, labels = images.to(device), labels.to(device) # from piazza was broken
+      # calculate outputs by running images through the network
+      outputs = model(images)
+      # the class with the highest energy is what we choose as prediction
+      _, predicted = torch.max(outputs.data, 1)
+      total += labels.size(0)
+      correct += (predicted == labels).sum().item()
+      # TP: Predicted 1, Actual 1
+      TP += ((predicted == 1) & (labels == 1)).sum().item()
+      
+      # TN: Predicted 0, Actual 0
+      TN += ((predicted == 0) & (labels == 0)).sum().item()
+      
+      # FP: Predicted 1, Actual 0
+      FP += ((predicted == 1) & (labels == 0)).sum().item()
+      
+      # FN: Predicted 0, Actual 1
+      FN += ((predicted == 0) & (labels == 1)).sum().item()
 
-  print(f'\nAccuracy of the network on the {total} test images: {100 * correct // total} %')
+  # Calculate final metrics
+  precision = TP / (TP + FP) if (TP + FP) > 0 else 0
+  recall = TP / (TP + FN) if (TP + FN) > 0 else 0
+  f1_score = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
+
+  print(f"\nAccuracy of the network on the {total} test images: {correct / total:.8f}")
+  print(f"\nAccuracy of the network on the {total} test images: {100 * correct / total:.8f} %")
+  print(f'\nPrecision of the network on the {total} test images: {precision}')
+  print(f'\nRecall of the network on the {total} test images: {recall}')
+  print(f'\nF1 Score of the network on the {total} test images: {f1_score}')
+  print(f'\nTP = {TP}, FP = {FP}, FN = {FN}, TN = {TN}')
