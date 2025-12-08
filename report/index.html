@@ -50,7 +50,18 @@ Introduction
 
 <!-- Approach -->
 <h3>Approach</h3>
-approach
+  Our goal was to build a binary classifier to tell AI-images from real photos. We tried two separate approaches based on our experience with CNNs.
+First was a simple custom CNN, second was a transfer-learned ResNet18 variant. For the data, we chose a Kaggle dataset containing a large number of real and AI-generated images.
+After loading the images from the train/test folders, resizing them to 224x224, normalizing them to ImageNet statistics, and adding horizontal-flip augmentation to the training data.
+Our training loop consists of CrossEntropy loss, an SGD optimizer with a learning rate of 0.001 and a momentum of 0.9, and a batch size of 64 images. 
+Throughout the training process, we set it up to output loss and accuracy so we can monitor them.
+	For our first model, the simple CNN, it consisted of a 3-block structure with convolution, batch normalization, ReLU, and max pooling. Then it had two fully connected layers with dropout 
+to classify into the two classes. Additionally, we used an SGD optimizer with momentum. This, combined with dropout, helped to reduce overfitting. Our other model uses ResNet18 with ImageNet-pretrained weights.
+We swap the final fully connected layer for a 2-class head and fine-tune using our dataset. Similar to the simple CNN, we used the same dataloader, transforms, loss, optimizer, and batch size. To determine 
+how the CNN performed, we ran it on the test data and measured its accuracy. Additionally, for the final model we chose, we generated a confusion matrix. Finally, we built a small Tkinter app that loads the 
+saved weights, runs the same transforms, and shows the predicted label with confidence for any uploaded image.
+  Our training and evaluation loops were adapted from our ECE 4554 homework.
+
 <br><br>
 <!--Experiments-->
 <h3>Experiments and Results</h3>
