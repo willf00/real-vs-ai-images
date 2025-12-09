@@ -21,7 +21,7 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Loading model on {device}...")
 
 # Initialize architecture
-cnn = model.CNN(2).to(device) # Use resnet model for now
+cnn = model.SimpleCNN().to(device) # Use simple cnn model for now
 
 # Load weights
 # map_location ensures it works even if you switch between GPU/CPU machines
