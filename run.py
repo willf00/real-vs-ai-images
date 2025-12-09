@@ -48,3 +48,4 @@ if __name__ == '__main__':
 
     # utils.train(net, trainloader, criterion, optimizer, device, epochs=5)
     # utils.evaluate(net, testloader, device)
+    # torch.save(net.state_dict(), "./resnet_model.pth")
