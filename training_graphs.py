@@ -1,3 +1,9 @@
+"""
+training_graphs.py: Training/validation data collection and graph generation for SimpleCNN and ResNet
+Authors: Will Fete & Jason Albanus
+Date: 12/7/2025
+Notice: Trained the same way as the train funciton
+"""
 import torch
 import utils
 from torch.utils.data import DataLoader
@@ -8,8 +14,17 @@ from typing import Dict, Any, Optional
 def train_with_metrics(model: torch.nn.Module, train_loader: DataLoader, val_loader: DataLoader, 
                        criterion, optimizer, device: str, epochs: int = 5, log_interval: int = 500,) -> Dict[str, Any]:
     """
-    Train a model while tracking training and validation metrics
-    Stand alone function to not mess with any of the current implentation but essentailly works the same as the train function
+    Train a model and track training and validation metrics
+    What: runs the full train/val loop and stores loss/accuracy for later plotting
+    Args:
+        model: the PyTorch model to train
+        train_loader: dataloader for training data
+        val_loader: dataloader for validation data
+        criterion: loss function
+        optimizer: optimizer (e.g., SGD)
+        device: "cuda" or "cpu"
+        epochs: how many passes over the training set
+        log_interval: how many batches before logging a train point
     """
     history = {
         "train_steps": [], "train_loss": [], "train_acc": [], "epochs": [], "train_loss_epoch": [],
@@ -120,7 +135,11 @@ def train_with_metrics(model: torch.nn.Module, train_loader: DataLoader, val_loa
 
 def plot_train_loss_vs_accuracy(history: Dict[str, Any], save_path: Optional[str] = None) -> None:
     """
-    Plot training loss vs training accuracy
+    plots training loss vs training accuracy.
+    What: shows how loss and accuracy move together across each epoch
+    Args:
+        history: metrics dict returned by train_with_metrics
+        save_path: optional filepath to save instead of showing
     """
     epochs = history.get("epochs", [])
     train_loss_epoch = history.get("train_loss_epoch", [])
@@ -159,7 +178,14 @@ def plot_train_loss_vs_accuracy(history: Dict[str, Any], save_path: Optional[str
 
 
 def _plot_train_loss_vs_accuracy_on_ax(ax, history: Dict[str, Any], title: str) -> None:
-    """Plot training loss vs training accuracy on a provided axis."""
+    """
+    Plot training loss vs training accuracy on a given axes
+    What: same as above but draws on a provided subplot
+    Args:
+        ax: matplotlib axes to draw on
+        history: metrics dict from train_with_metrics
+        title: title for this subplot
+    """
     epochs = history.get("epochs", [])
     train_loss_epoch = history.get("train_loss_epoch", [])
     train_acc_epoch = history.get("train_acc_epoch", [])
@@ -189,7 +215,14 @@ def _plot_train_loss_vs_accuracy_on_ax(ax, history: Dict[str, Any], title: str) 
 
 
 def _plot_train_vs_val_accuracy_on_ax(ax, history: Dict[str, Any], title: str) -> None:
-    """Plot training vs validation accuracy on a provided axis."""
+    """
+    Plot training vs validation accuracy on a given axes
+    What: compares train and val accuracy per epoch on a provided subplot.
+    Args:
+        ax: matplotlib axes to draw on
+        history: metrics dict from train_with_metrics
+        title: title for this subplot
+    """
     epochs = history.get("epochs", [])
     train_acc_epoch = history.get("train_acc_epoch", [])
     val_epochs = history.get("val_epochs", [])
@@ -242,6 +275,7 @@ def plot_train_vs_val_accuracy(history: Dict[str, Any], save_path: Optional[str]
 if __name__ == "__main__":
     """
     To run both SimpleCNN and ResNet and view graphs
+    Takes a lot longer than simply running it on run.py
     """
     from torch import nn, optim
     import dataset as d
