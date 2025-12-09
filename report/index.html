@@ -20,6 +20,25 @@ color: #3366CC;
 .data {
 color: #FF9900;
 }
+
+figure {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 10px;
+  }
+  
+  figcaption {
+    margin-top: 10px; 
+    font-style: italic; 
+  }
+
+p {
+  text-indent: 30px;
+  text-align: justify;
+  margin-bottom: 15px;
+}
+
 </style>
   
 <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
@@ -42,36 +61,116 @@ color: #FF9900;
 
 <!-- Abstract -->
 <h3>Abstract</h3>
-abstract and then teaser figure (2 sentences)
+<p>
+This project aims to help mitigate the misuse of AI-generated images. Deep learning was leveraged through a simple convolutional network model and a ResNet18 variant model, and both models were trained on the CIFAKE dataset. The results show a high accuracy and other metrics in both models.
+<figure>
+<img src="real_image_teaser.jpg" alt="AI generated CIFAR-10 image" width="144" height="144">
+<img src="fake_image_teaser.jpg" alt="Real CIFAR-10 image" width="144" height="144">
+<figcaption>
+  <span style="font-size: 12px; line-height: 1.5em;">Figure 1: AI-Generated Image (Left) and Real Image (Right)</span>
+  </figcaption>
+</figure>
+</p>
 <br><br>
 <!-- Introduction -->
 <h3>Introduction</h3>
+<p>
 The recent creation of highly realistic, AI-generated synthetic media presents a new challenge in distinguishing between AI and real images. These AI-generated images have a high potential for malicious use, like disinformation campaigns and fraud. This makes it critical to be able to automatically detect AI-generated images. This project aims to address this issue using a deep learning solution to classify images as real or fake. A convolutional neural network (CNN) will be used to do this because of its success with image analysis and feature extraction. The CNN utilizes a series of convolutional layers to extract spatial features and learn the underlying statistical differences and distinguish between real and AI-generated images.
-
+</p>
 
 <!-- Approach -->
 <h3>Approach</h3>
-  Our goal was to build a binary classifier to tell AI-images from real photos. We tried two separate approaches based on our experience with CNNs.
+
+<p>Our goal was to build a binary classifier to tell AI-images from real photos. We tried two separate approaches based on our experience with CNNs.
 First was a simple custom CNN, second was a transfer-learned ResNet18 variant. For the data, we chose a Kaggle dataset containing a large number of real and AI-generated images.
 After loading the images from the train/test folders, resizing them to 224x224, normalizing them to ImageNet statistics, and adding horizontal-flip augmentation to the training data.
 Our training loop consists of CrossEntropy loss, an SGD optimizer with a learning rate of 0.001 and a momentum of 0.9, and a batch size of 64 images. 
 Throughout the training process, we set it up to output loss and accuracy so we can monitor them.
-	For our first model, the simple CNN, it consisted of a 3-block structure with convolution, batch normalization, ReLU, and max pooling. Then it had two fully connected layers with dropout 
+</p>
+<p>
+For our first model, the simple CNN, it consisted of a 3-block structure with convolution, batch normalization, ReLU, and max pooling. Then it had two fully connected layers with dropout 
 to classify into the two classes. Additionally, we used an SGD optimizer with momentum. This, combined with dropout, helped to reduce overfitting. Our other model uses ResNet18 with ImageNet-pretrained weights.
 We swap the final fully connected layer for a 2-class head and fine-tune using our dataset. Similar to the simple CNN, we used the same dataloader, transforms, loss, optimizer, and batch size. To determine 
 how the CNN performed, we ran it on the test data and measured its accuracy. Additionally, for the final model we chose, we generated a confusion matrix. Finally, we built a small Tkinter app that loads the 
 saved weights, runs the same transforms, and shows the predicted label with confidence for any uploaded image.
-  Our training and evaluation loops were adapted from our ECE 4554 homework.
-
+Our training and evaluation loops were adapted from our ECE 4554 homework.
+</p>
 <br><br>
 <!--Experiments-->
 <h3>Experiments and Results</h3>
-also include qualitative results
+<p>
+  To evaluate the SimpleCNN and ResNet18 models described above, we trained and tested them on a balanced Kaggle dataset of real and AI‑generated images. The dataset contains 100,000 training images (50,000 real and 50,000 fake) and 20,000 test images (10,000 real and 10,000 fake). Every image was resized to 224x224 pixels, normalized to ImageNet statistics, and the training split used random horizontal flips for augmentation. Because all the images come from a single dataset with a fixed resolution and a single type of generative model, the results reflect performance in this controlled setting. This would not fully capture how the model would generalize to other images.
+</p>
+<p>
+  For all experiments and training runs, we used the same parameter setup for fair comparison. Both models were trained for five epochs with a batch size of 64 images, using stochastic gradient descent with a learning rate of 0.001, momentum of 0.9, and cross-entropy loss, on a single GPU. The simple CNN is a lightweight network with three convolutional blocks followed by two fully connected layers. On the other hand, the ResNet 18 model is based on the ImageNet-pretrained weights. It then replaces the final fully connected layer with a two-class head that is fine-tuned on our data. Both models also share the same dataloaders, preprocessing, optimizer settings, and training/evaluation loops.
+</p>
+<p>	
+  As a baseline, a random classifier would get a result of about 50% accuracy. We wanted a result way higher than a random guess. Before training, we set a target of at least 85% test accuracy. However, we wanted to achieve an accuracy of 90% or higher.
+</p>	
+<p>
+  For our quantitative evaluation, we generated accuracy, precision, recall, and F1 on the 20,000-image test set. In this case, the real images are treated as positive (label 1) in all confusion matrices. Across two independent runs, the simple CNN achieved an accuracy of about 94.6-94.7% and an F1 score of 0.946-0.948, while the ResNet18 model reached about 97.6–97.7% accuracy and an F1 score of 0.975–0.977, clearly outperforming both the SimpleCNN and the 50% random baseline.
+</p>	
+
+<figure>
+<img src="summary_table.png" alt="Summary of key metrics with both models over two runs" width="756" height="756">
+<figcaption>
+  <span style="font-size: 12px; line-height: 1.5em;">Figure 2: Summary of Quantitative Results</span>
+  </figcaption>
+</figure>
+<figure>
+<img src="simplecnn_table.png" alt="Confusion Matrices for Simple CNN" width="756" height="756">
+<figcaption>
+  <span style="font-size: 12px; line-height: 1.5em;">Figure 3: Confusion Matrices for Simple CNN</span>
+  </figcaption>
+</figure>
+<figure>
+<img src="resnet_table.png" alt="Confusion Matrices for ResNet18 Model" width="756" height="756">
+<figcaption>
+  <span style="font-size: 12px; line-height: 1.5em;">Figure 4: Confusion Matrices for ResNet18 Model</span>
+  </figcaption>
+</figure>
+<p>The confusion matrices show that ResNet18 reduces both false positives (fake images predicted as real) and false negatives (real images predicted as fake) compared to the SimpleCNN. Between runs, the overall quantitative results are very stable, but interestingly, the relationship between precision and recall shifts. In the first run, each model has higher recall than precision, whereas in the second run, precision is higher than recall. This means the first run is more willing to label images as real, leading to more true positives but also more false positives. Moreover, the second run is more conservative in calling images real. This produces more true negatives but also more false negatives.
+</p>
+<p>
+  To better understand how the models learned over time, we created plots of training loss versus training accuracy and of training accuracy versus validation accuracy for both runs. In all cases, the loss curves decrease smoothly over the five epochs, while the training accuracy increases and then plateaus. This reveals that the optimization is stable and that adding more epochs would yield little improvement while risking overfitting. The training accuracy vs. validation accuracy plot shows different results for ResNet18 and simpleCNN. The simpleCNN plots show very small gaps, if any, between the training and testing accuracy. Telling us that there is almost no overfitting and that the choice of training time was good. On the other hand, the ResNet18 model shows a wider gap between training and testing accuracy. This indicates that overfitting is occurring, which is not entirely surprising. Across the two runs, the shapes of these curves are very similar, reinforcing that the training procedure is stable. Additional regularization, such as adding dropout to the ResNet18 head or more substantial data augmentation, could further narrow the remaining train–validation gap.
+</p>
+<figure>
+<img src="first_run_graph.png" alt="First Run of SimpleCNN and ResNet Training-Validation Graphs" width="756" height="756">
+<figcaption>
+  <span style="font-size: 12px; line-height: 1.5em;">Figure 5: First Run of SimpleCNN and ResNet Training-Validation Graphs</span>
+  </figcaption>
+</figure>
+<figure>
+<img src="second_run_graph.png" alt="Second Run of SimpleCNN and ResNet Training-Validation Graphs" width="756" height="756">
+<figcaption>
+  <span style="font-size: 12px; line-height: 1.5em;">Figure 6: Second Run of SimpleCNN and ResNet Training-Validation Graphs</span>
+  </figcaption>
+</figure>
+<p>
+Both models outperform our baseline and even pass the targeted 90% accuracy. This goes to show that a small custom CNN can, in a controlled environment, reliably distinguish between real and AI-generated images. The SimpleCNN achieved about 94-95% accuracy, while the ResNet18 achieved about 97-98% accuracy with higher precision, recall, and F1 scores. This confirms that using a deeper, pretrained architecture with transfer learning provides a clear benefit, although at a slightly higher computing cost.
+</p>
+<p>
+In application, the more serious error is predicting "real" for an image that is actually AI-generated. These mistakes could allow AI-images to be trusted as "real". False negatives, real images flagged as fake, are less harmful, but we still want to avoid them. From this perspective, ResNet18 runs are preferred over SimpleCNN, especially the run with higher precision.
+</p>
+<p>
+In addition to the quantitative results, we have more direct results from our Tkinter GUI. This GUI loads the SimpleCNN weights, applies the same preprocessing to the images, and displays the predicted label and confidence for any uploaded image. On typical test images, the GUI produced intuitive results, classifying real images as real and fake images as fake nearly all the time. We also observed rare failure cases, classifying a real image as fake.
+</p>
+<figure>
+<img src="gui_test.png" alt="Results of additional experiementation with using the GUI" width="756" height="756">
+<figcaption>
+  <span style="font-size: 12px; line-height: 1.5em;">Figure 7: SimpleCNN Used in the GUI Infering on Test Data</span>
+  </figcaption>
+</figure>
+<p>
+  Our experiments have several limitations. Firstly, all the models were trained and evaluated on a single dataset with a fixed resolution and a specific type of AI generator. The performance of our models reflects the performance within the controlled environment. When we tested the GUI on images outside the dataset, the predictions were always fake, with almost 100% confidence. This shows how limited the domain is, given our training on the existing dataset. An easy next step would be to train on a substantially more diverse set of images with many different types of AI-generated images.
+</p>
 <br><br>
 
 <!--Conclusion-->
 <h3>Conclusion</h3>
+<p>
 This report has described the need for differentiating between real and AI-generated images, and proposed a solution using deep learning techniques. The threat of malicious AI-generated images is real, and we proposed a way to help mitigate that. Our proposed solution gave both a simple CNN, similar to what was worked on in class, and a ResNet18 variant model. With very high levels of accuracy, balanced precision and recall scores, and a high F1-Score, it is clear that both of the approaches are good at not only classifying real and fake images, but also are not biased towards false positives or false negatives. This is really important when dealing with automatic detection where you don’t want to mark real images as AI-generated, while also not marking AI-generated images as real. While the results were very good, there are some potential improvements to the project and the approach. The current dataset is based on CIFAR-10, which does not have the best quality of images, despite scaling them up to 224x224. This means that the models may struggle with high quality AI-generated images that are more prevalent with recent advances in AI. This problem could be addressed with a new dataset with these newer AI-generated images, but as AI continues to improve and evolve, the methods to detect and prevent malicious use of it must do the same.
+</p>
 <br><br>
 
 <h3>References</h3>
